@@ -1,8 +1,10 @@
 import { useRef } from 'react'
 import './ItemsInCart.css'
+import { Contexts } from '../../../context'
 function ItemsInCart (props){
-let{element,index,remove,changeQte}=props
+let{element,index}=props
 let ref = useRef(null)
+let {changeQte,remove}=Contexts()
 return(
     <div id='ItemInCart'>
         <div id='dataContainer'>

@@ -4,24 +4,34 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Slider from '../../src/component /Slider/Slider'
 import ItemsInCart from '../../src/component /ItemsIncart/ItemsInCart'
+import { Contexts } from '../../context'
 function ProductDet(props){
     let {id}=useParams()
-     
+    
     let navigate=useNavigate()
     useEffect(()=>{
-        getAPI(id)
-    },[])
-    let [detail,setdetail]=useState(null)
- const getAPI=async(id)=>{
-    const res=await axios.get(`https://dummyjson.com/products/${id}`)
-   if(!res){
-    return alert('Erreur API')
-   }
-   setdetail(res.data)
-   console.log(res.data)
- }
-
+       getAPI(id)
+      },[])
+      let [detail,setdetail]=useState(null)
+      const getAPI=async(id)=>{
+         const res=await axios.get(`https://dummyjson.com/products/${id}`)
+         if(!res){
+            return alert('Erreur API')
+         }
+         setdetail(res.data)
+      }
+      const {getIncrat,hidcart,sethidcart,Total,cartarray}=Contexts()
 return(<>
+ <i id='Cart' className="fa-solid fa-cart-shopping" onClick={()=>sethidcart(!hidcart)} ></i>
+        { hidcart ? (<div className='Cart'>
+        <h3 id='total'>total : {Total} $</h3>
+
+          {
+            cartarray.map((e,i)=>{return <ItemsInCart element={e} index={i}  />})
+            }
+          
+      </div>):null}
+   
   
    {detail ? (<div id='ProductDetails'>
     <div >
@@ -31,7 +41,7 @@ return(<>
     <div id="ProductsDescription">{detail.description}</div>
     <div id='Buttons'>
     <button id='BackBtn' onClick={()=>navigate(`/Products`)}>Back</button>
-    <button id='AddToCartBtn'   >Add To Cart</button>
+    <button id='AddToCartBtn'  onClick={()=>getIncrat(detail)} >Add To Cart</button>
     </div>
     </div>
     <div id='MoreImages'><p>More images : </p>{<Slider images={detail.images}/>}</div>
